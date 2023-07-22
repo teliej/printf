@@ -4,6 +4,18 @@
 
 
 
+int for_binary(unsigned int binary, int *p)
+{
+	if (binary / 2 != 0)
+		for_binary(binary / 2, p);
+
+	_putchar('0' + (binary % 2));
+
+	(*p)++;
+
+	return (0);
+}
+
 int for_num(int i, int *p)
 {
 	unsigned int j;
@@ -33,6 +45,7 @@ int _choice(const char *format, int *p, va_list args)
 	const char *str;
 	char c;
 	int i;
+	unsigned int binary;
 
 	switch (*format)
 	{
@@ -60,6 +73,10 @@ int _choice(const char *format, int *p, va_list args)
 		case 'i':
 			i = va_arg(args, int);
 			for_num(i, p);
+			break;
+		case 'b':
+			binary  = va_arg(args, unsigned int);
+			for_binary(binary, p);
 			break;
 		default:
 			_putchar('%');
