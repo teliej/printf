@@ -14,9 +14,9 @@ int _choice(const char *format, int *p, va_list args)
 			(*p)++;
 			break;
 		case 's':
-			str = va_arg(args, const char*);
+			str = va_arg(args, char *);
 			if (!str)
-				str = "(null)*;
+				str = "(null)";
 			while (*str)
 			{
 				_putchar(*str);
