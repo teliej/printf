@@ -2,10 +2,37 @@
 #include <stdarg.h>
 #include "main.h"
 
+
+
+int for_num(int i, int *p)
+{
+	unsigned int j;
+
+	if (i < 0)
+	{
+		_putchar('-');
+		(*p)++;
+		j = -i;
+	}
+	else
+		j = i;
+
+	if (j / 10 != 0)
+		for_num(j / 10, p);
+
+	_putchar(j % 10 + '0');
+	(*p)++;
+	return (0);
+}
+
+
+
+
 int _choice(const char *format, int *p, va_list args)
 {
 	const char *str;
 	char c;
+	int i;
 
 	switch (*format)
 	{
@@ -28,6 +55,11 @@ int _choice(const char *format, int *p, va_list args)
 			c = va_arg(args, int);
 			_putchar(c);
 			(*p)++;
+			break;
+		case 'd':
+		case 'i':
+			i = va_arg(args, int);
+			for_num(i, p);
 			break;
 		default:
 			_putchar('%');
