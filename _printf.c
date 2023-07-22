@@ -11,7 +11,7 @@ int _choice(const char *format, int *p, va_list args)
 	{
 		case '%':
 			_putchar('%');
-			p++;
+			(*p)++;
 			break;
 		case 's':
 			str = va_arg(args, const char*);
@@ -19,18 +19,18 @@ int _choice(const char *format, int *p, va_list args)
 			while (*str)
 			{
 				_putchar(*str);
-				p++;
+				(*p)++;
 				str++;
 			}
 			break;
 		case 'c':
 			c = va_arg(args, int);
 			_putchar(c);
-			p++;
+			(*p)++;
 			break;
 		default:
 			_putchar('%');
-			p++;
+			(*p) += 2;
 			break;
 	}
 	return (0);
