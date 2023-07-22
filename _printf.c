@@ -60,6 +60,18 @@ int _choice(const char *format, int *p, va_list args)
 		case 'b':
 			for_to_binary(va_arg(args, unsigned int), p);
 			break;
+		case 'u':
+			for_unsign(va_arg(args, unsigned int), p);
+			break;
+		case 'o':
+			for_octal(va_arg(args, unsigned int), p);
+			break;
+		case 'x':
+			for_lower_hex(va_arg(args, unsigned int), p);
+			break;
+		case 'X':	
+			for_upper_hex(va_arg(args, unsigned int), p);
+			break;
 		default:
 			_putchar('%');
 			(*p) += 2;
