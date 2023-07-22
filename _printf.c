@@ -39,8 +39,8 @@ int _choice(const char *format, int *p, va_list args)
 int _printf(const char *format, ...)
 {
 	int printed = 0;
-
 	va_list args;
+
 	va_start(args, format);
 
 	while (*format)
