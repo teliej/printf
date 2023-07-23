@@ -6,7 +6,9 @@
  *
  * Return: On success 1.
  */
-int _putchar(char c)
+int _putchar(char c, char *buff, int *buff_index)
 {
-	return (write(1, &c, 1));
+	buff[*buff_index] = c;
+	(*buff_index)++;
+	return (0);
 }

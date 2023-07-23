@@ -42,41 +42,35 @@ int for_num(int i, int *p)
 
 int _choice(const char *format, int *p, va_list args)
 {
-	const char *str;
-	char c;
-	int i;
-	unsigned int binary;
-
 	switch (*format)
 	{
 		case '%':
-			_putchar('%');
-			(*p)++;
+			for_percent(p);
 			break;
 		case 's':
-			str = va_arg(args, char *);
-			if (!str)
-				str = "(null)";
-			while (*str)
-			{
-				_putchar(*str);
-				(*p)++;
-				str++;
-			}
+			for_short(va_arg(args, char *), p);
 			break;
 		case 'c':
-			c = va_arg(args, int);
-			_putchar(c);
-			(*p)++;
+			for_char(va_arg(args, int), p);
 			break;
 		case 'd':
 		case 'i':
-			i = va_arg(args, int);
-			for_num(i, p);
+			for_integer(va_arg(args, int), p);
 			break;
 		case 'b':
-			binary  = va_arg(args, unsigned int);
-			for_binary(binary, p);
+			for_to_binary(va_arg(args, unsigned int), p);
+			break;
+		case 'u':
+			for_unsign(va_arg(args, unsigned int), p);
+			break;
+		case 'o':
+			for_octal(va_arg(args, unsigned int), p);
+			break;
+		case 'x':
+			for_lower_hex(va_arg(args, unsigned int), p);
+			break;
+		case 'X':	
+			for_upper_hex(va_arg(args, unsigned int), p);
 			break;
 		default:
 			_putchar('%');
