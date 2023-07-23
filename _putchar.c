@@ -8,7 +8,6 @@
  */
 int _putchar(char c, char *buff, int *buff_index)
 {
-	buff[*buff_index] = c;
-	(*buff_index)++;
+	buff[(*buff_index)++] = c;
 	return (0);
 }
