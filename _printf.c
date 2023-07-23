@@ -125,11 +125,7 @@ int _printf(const char *format, ...)
 		{
 			if(buff_index == (LOCAL_BUFFER_SIZE - 1))
 			{
-				if (out_buff(buff, buff_index) < 0)
-				{
-					va_end(args);
-					return -1;
-				}
+				out_buff(buff, buff_index);
 				printed += buff_index;
 				buff_index = 0;
 			}
@@ -137,12 +133,11 @@ int _printf(const char *format, ...)
 		}
 		format++;
 	}
-	if (buff_index > 0) {
-	if (out_buff(buff, buff_index) < 0) {
-            va_end(args);
-            return -1;
-	}
-	printed += buff_index;
+	if (buff_index > 0)
+	{
+		out_buff(buff, buff_index);
+		va_end(args);
+		return -1;
 	}
 	va_end(args);
 	return (printed);
