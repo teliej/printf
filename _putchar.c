@@ -14,10 +14,5 @@
 int _putchar(char c, char *buff, int *buff_index)
 {
 	buff[(*buff_index)++] = c;
-	if (*buff_index >= LOCAL_BUFFER_SIZE - 1)
-	{
-		write(1,buff, *buff_index);
-		*buff_index = 0;
-	}
 	return (0);
 }
