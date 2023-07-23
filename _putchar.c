@@ -1,4 +1,9 @@
 #include <unistd.h>
+#include <stdint.h>
+#include <stddef.h>
+#include "main.h"
+
+#define LOCAL_BUFFER_SIZE 1024
 
 /**
  * _putchar - writes the character c to stdout
@@ -9,5 +14,10 @@
 int _putchar(char c, char *buff, int *buff_index)
 {
 	buff[(*buff_index)++] = c;
+	if (*buff_index >= LOCAL_BUFFER_SIZE - 1)
+	{
+		write(1,buff, *buff_index);
+		*buff_index = 0;
+	}
 	return (0);
 }
