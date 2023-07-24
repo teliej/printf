@@ -1,18 +1,29 @@
-#ifndef _MAIN_H_
-#define _MAIN_H_
+#ifndef MAIN_H
+#define MAIN_H
 
-int _putchar(char c, char *buff, int *buff_index);
+
+#include <stdarg.h>
+#include <unistd.h>
+
+#define BUFFER_SIZE 1024
+
+
+void _putchar(char c, char *buff, int *buff_index);
+void with_write(char *buff, int *buff_index);
+
 int _printf(const char *format, ...);
-int for_binary(unsigned int binary, int *p, char *buff, int *buff_index);
-int for_num(int i, int *p, char *buff, int *buff_index);
-int for_percent(int *p, char *buff, int *buff_index);
-int for_short(const char *str, int *p, char *buff, int *buff_index);
-int for_char(char c, int *p, char *buff, int *buff_index);
-int for_integer(int i, int *p, char *buff, int *buff_index);
-int for_to_binary(unsigned int binary, int *p, char *buff, int *buff_index);
-int for_unsign(unsigned int i, int *p, char *buff, int *buff_index);
-int for_octal(unsigned int j, int *p, char *buff, int *buff_index);
-void for_lower_hex(unsigned int k, int *p, char *buff, int *buff_index);
-void for_upper_hex(unsigned int k, int *p, char *buff, int *buff_index);
+
+void see_string(char *str, int *p, char *buff, int *buff_index);
+int see_flags(const char *format);
+void for_integer(int num, int *p, char *buff, int *buff_index, int *flag);
+void for_binary(unsigned int b, int *p, char *buff, int *buff_index);
+void for_ui(unsigned int u, int *p, char *buff, int *buff_index, int *flag);
+void for_octal(unsigned int o, int *p, char *buff, int *buff_index, int *flag);
+void for_hex(unsigned int h, int uppercase, int *p, char *buff, int *buff_index, int *flag);
+void for_str_non(char *s, int *p, char *buff, int *buff_index);
+void for_ptr(void *ptr, int *p, char *buff, int *buff_index);
+
+void _choice(const char *format, int *p, va_list args, char *buff, int *buff_index, int *flag);
+void _choice_two(const char *format, int *p, va_list args, char *buff, int *buff_index, int *flag);
 
 #endif

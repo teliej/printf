@@ -1,123 +1,118 @@
 #include "main.h"
+#include <math.h>
 
 
-/**
-*/
-
-int for_percent(int *p, char *buff, int *buff_index)
+void for_string(const char *str, int *p, char *buff, int *buff_index)
 {
-	_putchar('%', buff, buff_index);
-
- 	(*p)++;
-
-	return (0);
-}
-/**
-* for_short - prints a short.
-* @p: contains the printed char
-* @args: the list of the args
-* Return: returns zero means success 
-*/
-int for_short(const char *str, int *p, char *buff, int *buff_index)
-{
-	if (!str)
-	{
-		str = "(null)";
-	}
-
-	while (*str)
-	{
-		_putchar(*str, buff, buff_index);
-
-		(*p)++;
-
-		str++;
-	}
-
-	return (0);
+    while (*str)
+    {
+        _putchar(*str, buff, buff_index);
+        (*p)++;
+        str++;
+    }
 }
 
-/**
-*/
-
-int for_char(char c, int *p, char *buff, int *buff_index)
+void for_integer(int num, int *p, char *buff, int *buff_index, int *flag)
 {
-	_putchar(c, buff, buff_index);
+    unsigned int n;
 
-	(*p)++;
+    if (*flag == 1 && num >= 0)
+    {
+        buff[(*buff_index)++] = '+';
+        (*p)++;
+        *flag = 0;
+    }
+    else if (*flag == 2 && num >= 0)
+    {
+        buff[(*buff_index)++] = ' ';
+        (*p)++;
+        *flag = 0;
+    }
 
-	return (0);
+    if (num < 0)
+    {
+        _putchar('-', buff, buff_index);
+        (*p)++;
+        n = -num;
+    }
+    else
+        n = num;
+
+    if (n / 10 != 0)
+        for_integer(n / 10, p, buff, buff_index, flag);
+
+    _putchar(n % 10 + '0', buff, buff_index);
+    (*p)++;
 }
 
-/**
-*/
-
-int for_integer(int i, int *p, char *buff, int *buff_index)
+void for_binary(unsigned int b, int *p, char *buff, int *buff_index)
 {
-	for_num(i, p, buff, buff_index);
+    if (b / 2 != 0)
+        for_binary(b / 2, p, buff, buff_index);
 
-	return (0);
+    _putchar('0' + (b % 2), buff, buff_index);
+    (*p)++;
 }
 
-
-/**
-*/
-
-
-int for_to_binary(unsigned int binary, int *p, char *buff, int *buff_index)
+void for_ui(unsigned int u, int *p, char *buff, int *buff_index, int *flag)
 {
-	for_binary(binary, p, buff, buff_index);
+    if (*flag == 1)
+    {
+        buff[(*buff_index)++] = '+';
+        (*p)++;
+        *flag = 0;
+    }
+    else if (*flag == 2)
+    {
+        buff[(*buff_index)++] = ' ';
+        (*p)++;
+        *flag = 0;
+    }
 
-	return (0);
+    if (u / 10 != 0)
+        for_ui(u / 10, p, buff, buff_index, flag);
+
+    _putchar(u % 10 + '0', buff, buff_index);
+    (*p)++;
 }
 
-
-int for_unsign(unsigned int i, int *p, char *buff, int *buff_index)
+void for_octal(unsigned int o, int *p, char *buff, int *buff_index, int *flag)
 {
-	if (i / 10 != 0)
-		for_unsign(i / 10, p, buff, buff_index);
-	_putchar('0' + (i % 10), buff, buff_index);
-	(*p)++;
-	return (0);
+    if (*flag == 3)
+    {
+        buff[(*buff_index)++] = '0';
+        (*p)++;
+        *flag = 0;
+    }
+
+    if (o / 8 != 0)
+        for_octal(o / 8, p, buff, buff_index, flag);
+
+    _putchar(o % 8 + '0', buff, buff_index);
+    (*p)++;
 }
 
-
-int for_octal(unsigned int j, int *p, char *buff, int *buff_index)
+void for_hex(unsigned int i, int uppercase, int *p, char *buff, int *buff_index, int *flag)
 {
-	if (j / 8 != 0)
-		for_octal(j / 8, p, buff, buff_index);
-	_putchar('0' + (j % 8), buff, buff_index);
-	(*p)++;
-	return (0);
+    char *str;
+
+    if (*flag == 3)
+    {
+        buff[(*buff_index)++] = '0';
+        buff[(*buff_index)++] = 'x';
+        (*p) += 2;
+        *flag = 0;
+    }
+
+    if (uppercase)
+        str = "0123456789ABCDEF";
+    else
+        str = "0123456789abcdef";
+
+    if (i / 16 != 0)
+        for_hex(i / 16, uppercase, p, buff, buff_index, flag);
+
+    _putchar(str[i % 16], buff, buff_index);
+    (*p)++;
 }
 
-
-
-
-void for_lower_hex(unsigned int k, int *p, char *buff, int *buff_index)
-{
-	char *str;
-
-	str = "0123456789abcdef";
-
-	if (k / 16 != 0)
-		for_lower_hex(k / 16, p, buff, buff_index);
-
-	_putchar(str[k % 16], buff, buff_index);
-
-	(*p)++;
-}
-
-void for_upper_hex(unsigned int k, int *p, char *buff, int *buff_index)
-{
-	char *str;
-
-	str = "0123456789ABCDEF";
-
-	if (k / 16 != 0)
-		for_upper_hex(k / 16, p, buff, buff_index);
-
-	_putchar(str[k % 16], buff, buff_index);
-
-	(*p)++;
-}

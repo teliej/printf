@@ -1,144 +1,119 @@
-#include <stdio.h>
 #include <stdarg.h>
-#include <unistd.h>
 #include "main.h"
+#include <stddef.h>
 
-#define LOCAL_BUFFER_SIZE 1024
 
 
-int for_binary(unsigned int binary, int *p, char *buff, int *buff_index)
+void _choice_two(const char *format, int *p, va_list args, char *buff, int *buff_index, int *flag)
 {
-	if (binary / 2 != 0)
-		for_binary(binary / 2, p, buff, buff_index);
-
-	_putchar('0' + (binary % 2), buff, buff_index);
-
-	(*p)++;
-
-	return (0);
-}
-
-int for_num(int i, int *p, char *buff, int *buff_index)
-{
-	unsigned int j;
-
-	if (i < 0)
-	{
-		_putchar('-', buff, buff_index);
-		(*p)++;
-		j = -i;
-	}
-	else
-		j = i;
-
-	if (j / 10 != 0)
-		for_num(j / 10, p, buff, buff_index);
-
-	_putchar(j % 10 + '0', buff, buff_index);
-	(*p)++;
-	return (0);
+    switch (*format)
+    {
+        case 'X':
+            for_hex(va_arg(args, unsigned int), 1, p, buff, buff_index, flag);
+            break;
+        case 'p':
+            for_ptr(va_arg(args, void *), p, buff, buff_index);
+            break;
+        case 'S':
+            for_str_non(va_arg(args, char *), p, buff, buff_index);
+            break;
+        case 'x':
+            for_hex(va_arg(args, unsigned int), 0, p, buff, buff_index, flag);
+            break;
+        default:
+            _putchar('%', buff, buff_index);
+            _putchar(*format, buff, buff_index);
+            (*p) += 2;
+            break;
+    }
 }
 
 
-
-
-int _choice(const char *format, int *p, va_list args,  char *buff,
-		int *buff_index)
+void _choice(const char *format, int *p, va_list args, char *buff, int *buff_index, int *flag)
 {
-	switch (*format)
-	{
-		case '%':
-			for_percent(p, buff, buff_index);
-			break;
-		case 's':
-			for_short(va_arg(args, char *), p, buff, buff_index);
-			break;
-		case 'c':
-			for_char(va_arg(args, int), p, buff, buff_index);
-			break;
-		case 'd':
-		case 'i':
-			for_integer(va_arg(args, int), p, buff, buff_index);
-			break;
-		case 'b':
-			for_to_binary(va_arg(args, unsigned int), p, buff, buff_index);
-			break;
-		case 'u':
-			for_unsign(va_arg(args, unsigned int), p, buff, buff_index);
-			break;
-		case 'o':
-			for_octal(va_arg(args, unsigned int), p, buff, buff_index);
-			break;
-		case 'x':
-			for_lower_hex(va_arg(args, unsigned int), p, buff, buff_index);
-			break;
-		case 'X':	
-			for_upper_hex(va_arg(args, unsigned int), p, buff, buff_index);
-			break;
-		default:
-			_putchar('%', buff, buff_index);
-			(*p) += 2;
-			break;
-	}
-	return (0);
-}
-
-int out_buff(const char *buffer, int length)
-{
-	int outted = 0;
-
-	while (outted < length)
-	{
-		int i = write(1, (buffer + outted), (length - outted));
-
-		if (i < 0)
-		{
-			return -1;
-		}
-		outted += i;
-	}
-	return outted;
+    switch (*format)
+    {
+        case 's':
+            for_str_non(va_arg(args, char *), p, buff, buff_index);
+            break;
+        case '%':
+            _putchar('%', buff, buff_index);
+            (*p)++;
+            break;
+        case 'b':
+            for_binary(va_arg(args, unsigned int), p, buff, buff_index);
+            break;
+        case 'u':
+            for_ui(va_arg(args, unsigned int), p, buff, buff_index, flag);
+            break;
+        case 'o':
+            for_octal(va_arg(args, unsigned int), p, buff, buff_index, flag);
+            break;
+	case 'c':
+            _putchar(va_arg(args, int), buff, buff_index);
+            (*p)++;
+            break;	
+        case 'd':
+        case 'i':
+            for_integer(va_arg(args, int), p, buff, buff_index, flag);
+            break;
+        default:
+            _choice_two(format, p, args, buff, buff_index, flag);
+    }
 }
 
 
 
+/**
+ * _printf - Custom printf function.
+ *
+ * Description: This function produces formatted output according to the given format.
+ * It supports the following conversion specifiers: c, s, %, u, o, x, X.
+ * The function uses a local buffer to minimize the number of write calls for performance.
+ *
+ * @format: A character string containing zero or more directives.
+ * @...: Variable arguments to be formatted.
+ *
+ * Returns: The number of characters printed (excluding the null byte used to end output to strings).
+ *          Returns -1 on error or if the format is invalid.
+ */
 int _printf(const char *format, ...)
 {
-	int printed = 0;
-	va_list args;
-	char buff[LOCAL_BUFFER_SIZE];
-	int buff_index = 0;
-	
-	va_start(args,format);
-	
-	if (format == NULL || (format[0] == '%' && format[1] == '\0'))
-		return (-1);
+    int printed = 0; /** Variable to keep track of the total characters printed */
+    int buff_index = 0; /** Current index in the buffer */
+    char buff[BUFFER_SIZE]; /** Buffer to store formatted output */
+    int flag = 0; /** check for any flags in the format specifier */
+    va_list args; /** Argument list for variable arguments */
 
-	while (*format)
-	{
-		if (*format == '%')
-		{
-			format++;
-			_choice(format, &printed, args, buff, &buff_index);
-		}
-		else
-		{
-			if(buff_index == (LOCAL_BUFFER_SIZE - 1))
-			{
-				out_buff(buff, buff_index);
-				printed += buff_index;
-				buff_index = 0;
-			}
-			buff[buff_index++] = *format;
-		}
+    /** Check for invalid format */
+    if (format == NULL || (format[0] == '%' && format[1] == '\0'))
+        return -1;
+    /** Initialize the argument list */
+    va_start(args, format);
+    /** Loop through the format string */
+    while (*format)
+    {
+        if (*format != '%') /** Regular character, not a format specifier */
+        {
+            _putchar(*format, buff, &buff_index);
+            printed++;
+        }
+        else
+        {
+            format++; /** Move past the '%' */
+            flag = see_flags(format);
+	    if (flag)
 		format++;
-	}
-	if (buff_index > 0)
-	{
-		out_buff(buff, buff_index);
-		va_end(args);
-		return -1;
-	}
-	va_end(args);
-	return (printed);
+            _choice(format, &printed, args, buff, &buff_index, &flag);
+        }
+        format++;
+    }
+    /** Flush any remaining characters in the buffer */
+    if (buff_index > 0)
+        with_write(buff, &buff_index);
+
+    /** Clean up the argument list */
+    va_end(args);
+    return printed; /** Return the total number of characters printed */
 }
+
