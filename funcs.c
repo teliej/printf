@@ -3,11 +3,12 @@
 /**
  * for_octal - Prints an unsigned number in octal notation
  * @types: Lista of arguments
- * @buffer: Buffer array to handle print
+ * @buff: Buffer array to handle print
  * @flags:  Calculates active flags
  * @width: get width
  * @precision: Precision specification
  * @size: Size specifier
+ * @args: Arguments
  * Return: Number of chars printed
  */
 int for_octal(va_list args, char buff[],
@@ -17,9 +18,9 @@ int for_octal(va_list args, char buff[],
 	int i = BUFF_SIZE - 2;
 	unsigned long int number;
 	unsigned long int all_num;
-    
-    number = va_arg(args, unsigned long int);
-    all_num = number;
+
+	number = va_arg(args, unsigned long int);
+	all_num = number;
 	UNUSED(width);
 	number = turn_unsgnd(number, size);
 
@@ -44,13 +45,14 @@ int for_octal(va_list args, char buff[],
 
 
 /**
- * for_hex_lower - Prints an unsigned number in hexadecimal notation
- * @types: Lista of arguments
- * @buffer: Buffer array to handle print
+ * for_hex_lower - Prints number in hexadecimal notation
+ * @types: List of arguments
+ * @buff: Buffer array to handle print
  * @flags:  Calculates active flags
  * @width: get width
  * @precision: Precision specification
  * @size: Size specifier
+ * @args: Arguments
  * Return: Number of chars printed
  */
 int for_hex_lower(va_list args, char buff[],
@@ -106,11 +108,12 @@ int for_integer(va_list args, char buff[],
 /**
  * for_unsigned - Prints an unsigned number
  * @types: List a of arguments
- * @buffer: Buffer array to handle print
+ * @buff: Buffer array to handle print
  * @flags:  Calculates active flags
  * @width: get width
  * @precision: Precision specification
  * @size: Size specifier
+ * @args: Arguments
  * Return: Number of chars printed.
  */
 int for_unsigned(va_list args, char buff[],
@@ -118,8 +121,8 @@ int for_unsigned(va_list args, char buff[],
 {
 	int i = BUFF_SIZE - 2;
 	unsigned long int number;
-    
-    number = va_arg(args, unsigned long int);
+
+	number = va_arg(args, unsigned long int);
 
 	number = turn_unsgnd(number, size);
 
@@ -143,7 +146,7 @@ int for_unsigned(va_list args, char buff[],
 /**
  * for_binary - Prints an unsigned number
  * @args: Lista of arguments
- * @buffer: Buffer array to handle print
+ * @buff: Buffer array to handle print
  * @flags:  Calculates active flags
  * @width: get width.
  * @precision: Precision specification
