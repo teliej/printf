@@ -133,8 +133,8 @@ int with_num(int index, char buff[],
 		}
 	}
 	if (jin)
-		buff[--ind] = jin;
-	return (write(1, &buff[ind], length));
+		buff[--index] = jin;
+	return (write(1, &buff[index], length));
 }
 
 /**
