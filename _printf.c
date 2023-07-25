@@ -40,7 +40,7 @@ int for_string(va_list args, char buff[],
 	int flags, int width, int precision, int size)
 {
 	int length = 0;
-    int i;
+	int i;
 	char *str = va_arg(args, char *);
 
 	UNUSED(buff);
@@ -106,8 +106,8 @@ int for_char(va_list args, char buff[],
 
 /**
  * out_buff - Prints the contents of the buffer if it exist
- * @buffer: Array of chars
- * @buff_ind: Index at which to add next char, represents the length.
+ * @buff: Array of chars
+ * @buff_index: Index to add next char, represents the length.
  */
 void out_buff(char buff[], int *buff_index)
 {
@@ -125,7 +125,7 @@ void out_buff(char buff[], int *buff_index)
 int _printf(const char *format, ...)
 {
 	int i;
-    int printed, written_chars = 0;
+	int printed, written_chars = 0;
 	int flags, width, precision, size, buff_index = 0;
 	va_list list;
 	char buff[BUFF_SIZE];
