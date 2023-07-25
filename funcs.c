@@ -1,118 +1,186 @@
 #include "main.h"
-#include <math.h>
 
-
-void for_string(const char *str, int *p, char *buff, int *buff_index)
+/**
+ * for_octal - Prints an unsigned number in octal notation
+ * @types: Lista of arguments
+ * @buffer: Buffer array to handle print
+ * @flags:  Calculates active flags
+ * @width: get width
+ * @precision: Precision specification
+ * @size: Size specifier
+ * Return: Number of chars printed
+ */
+int for_octal(va_list args, char buff[],
+	int flags, int width, int precision, int size)
 {
-    while (*str)
-    {
-        _putchar(*str, buff, buff_index);
-        (*p)++;
-        str++;
-    }
+
+	int i = BUFF_SIZE - 2;
+	unsigned long int number;
+	unsigned long int all_num;
+    
+    number = va_arg(args, unsigned long int);
+    all_num = number;
+	UNUSED(width);
+	number = turn_unsgnd(number, size);
+
+	if (number == 0)
+		buff[i--] = '0';
+
+	buff[BUFF_SIZE - 1] = '\0';
+
+	while (number > 0)
+	{
+		buff[i--] = (number % 8) + '0';
+		number /= 8;
+	}
+
+	if (flags & F_HASH && all_num != 0)
+		buff[i--] = '0';
+
+	i++;
+
+	return (do_unsgnd(0, i, buff, flags, width, precision, size));
 }
 
-void for_integer(int num, int *p, char *buff, int *buff_index, int *flag)
+
+/**
+ * for_hex_lower - Prints an unsigned number in hexadecimal notation
+ * @types: Lista of arguments
+ * @buffer: Buffer array to handle print
+ * @flags:  Calculates active flags
+ * @width: get width
+ * @precision: Precision specification
+ * @size: Size specifier
+ * Return: Number of chars printed
+ */
+int for_hex_lower(va_list args, char buff[],
+	int flags, int width, int precision, int size)
 {
-    unsigned int n;
-
-    if (*flag == 1 && num >= 0)
-    {
-        buff[(*buff_index)++] = '+';
-        (*p)++;
-        *flag = 0;
-    }
-    else if (*flag == 2 && num >= 0)
-    {
-        buff[(*buff_index)++] = ' ';
-        (*p)++;
-        *flag = 0;
-    }
-
-    if (num < 0)
-    {
-        _putchar('-', buff, buff_index);
-        (*p)++;
-        n = -num;
-    }
-    else
-        n = num;
-
-    if (n / 10 != 0)
-        for_integer(n / 10, p, buff, buff_index, flag);
-
-    _putchar(n % 10 + '0', buff, buff_index);
-    (*p)++;
+	return (for_hex(args, "0123456789abcdef", buff,
+		flags, 'x', width, precision, size));
 }
 
-void for_binary(unsigned int b, int *p, char *buff, int *buff_index)
+/**
+ * for_integer - Print int
+ * @args: Lista of arguments
+ * @buff: Buffer array to handle print
+ * @flags:  Calculates active flags
+ * @width: get width.
+ * @precision: Precision specification
+ * @size: Size specifier
+ * Return: Number of chars printed
+ */
+int for_integer(va_list args, char buff[],
+	int flags, int width, int precision, int size)
 {
-    if (b / 2 != 0)
-        for_binary(b / 2, p, buff, buff_index);
+	int i = BUFF_SIZE - 2;
+	int kane = 0;
+	long int Qir = va_arg(args, long int);
+	unsigned long int num;
 
-    _putchar('0' + (b % 2), buff, buff_index);
-    (*p)++;
+	Qir = convert_num_size(Qir, size);
+
+	if (Qir == 0)
+		buff[i--] = '0';
+
+	buff[BUFF_SIZE - 1] = '\0';
+	num = (unsigned long int)Qir;
+
+	if (Qir < 0)
+	{
+		num = (unsigned long int)((-1) * Qir);
+		kane = 1;
+	}
+
+	while (num > 0)
+	{
+		buff[i--] = (num % 10) + '0';
+		num /= 10;
+	}
+
+	i++;
+
+	return (write_number(kane, i, buff, flags, width, precision, size));
 }
 
-void for_ui(unsigned int u, int *p, char *buff, int *buff_index, int *flag)
+/**
+ * for_unsigned - Prints an unsigned number
+ * @types: List a of arguments
+ * @buffer: Buffer array to handle print
+ * @flags:  Calculates active flags
+ * @width: get width
+ * @precision: Precision specification
+ * @size: Size specifier
+ * Return: Number of chars printed.
+ */
+int for_unsigned(va_list args, char buff[],
+	int flags, int width, int precision, int size)
 {
-    if (*flag == 1)
-    {
-        buff[(*buff_index)++] = '+';
-        (*p)++;
-        *flag = 0;
-    }
-    else if (*flag == 2)
-    {
-        buff[(*buff_index)++] = ' ';
-        (*p)++;
-        *flag = 0;
-    }
+	int i = BUFF_SIZE - 2;
+	unsigned long int number;
+    
+    number = va_arg(args, unsigned long int);
 
-    if (u / 10 != 0)
-        for_ui(u / 10, p, buff, buff_index, flag);
+	number = turn_unsgnd(number, size);
 
-    _putchar(u % 10 + '0', buff, buff_index);
-    (*p)++;
+	if (number == 0)
+		buff[i--] = '0';
+
+	buff[BUFF_SIZE - 1] = '\0';
+
+	while (number > 0)
+	{
+		buff[i--] = (number % 10) + '0';
+		number /= 10;
+	}
+
+	i++;
+
+	return (do_unsgnd(0, i, buff, flags, width, precision, size));
 }
 
-void for_octal(unsigned int o, int *p, char *buff, int *buff_index, int *flag)
+
+/**
+ * for_binary - Prints an unsigned number
+ * @args: Lista of arguments
+ * @buffer: Buffer array to handle print
+ * @flags:  Calculates active flags
+ * @width: get width.
+ * @precision: Precision specification
+ * @size: Size specifier
+ * Return: Numbers of char printed.
+ */
+int for_binary(va_list args, char buff[],
+	int flags, int width, int precision, int size)
 {
-    if (*flag == 3)
-    {
-        buff[(*buff_index)++] = '0';
-        (*p)++;
-        *flag = 0;
-    }
+	unsigned int i, j, n, add_all;
+	unsigned int a[32];
+	int p;
 
-    if (o / 8 != 0)
-        for_octal(o / 8, p, buff, buff_index, flag);
+	UNUSED(buff);
+	UNUSED(flags);
+	UNUSED(width);
+	UNUSED(precision);
+	UNUSED(size);
 
-    _putchar(o % 8 + '0', buff, buff_index);
-    (*p)++;
+	n = va_arg(args, unsigned int);
+	j = 2147483648; /* (2 ^ 31) */
+	a[0] = n / j;
+	for (i = 1; i < 32; i++)
+	{
+		j /= 2;
+		a[i] = (n / j) % 2;
+	}
+	for (i = 0, add_all = 0, p = 0; i < 32; i++)
+	{
+		add_all += a[i];
+		if (add_all || i == 31)
+		{
+			char z = '0' + a[i];
+
+			write(1, &z, 1);
+			p++;
+		}
+	}
+	return (p);
 }
-
-void for_hex(unsigned int i, int uppercase, int *p, char *buff, int *buff_index, int *flag)
-{
-    char *str;
-
-    if (*flag == 3)
-    {
-        buff[(*buff_index)++] = '0';
-        buff[(*buff_index)++] = 'x';
-        (*p) += 2;
-        *flag = 0;
-    }
-
-    if (uppercase)
-        str = "0123456789ABCDEF";
-    else
-        str = "0123456789abcdef";
-
-    if (i / 16 != 0)
-        for_hex(i / 16, uppercase, p, buff, buff_index, flag);
-
-    _putchar(str[i % 16], buff, buff_index);
-    (*p)++;
-}
-
