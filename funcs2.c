@@ -3,11 +3,12 @@
 /**
  * for_reverse - Prints reverse string.
  * @types: Lista of arguments
- * @buffer: Buffer array to handle print
+ * @buff: Buffer array to handle print
  * @flags:  Calculates active flags
  * @width: get width
  * @precision: Precision specification
  * @size: Size specifier
+ * @args: Arguments
  * Return: Numbers of chars printed
  */
 
@@ -30,7 +31,7 @@ int for_reverse(va_list args, char buff[],
 
 		str = ")Null(";
 	}
-	for (i = 0; str[i]; i++);
+	for (i = 0; str[i]; i++)
 
 	for (i = i - 1; i >= 0; i--)
 	{
@@ -45,18 +46,19 @@ int for_reverse(va_list args, char buff[],
 /**
  * for_pointer - Prints the value of a pointer variable
  * @types: List a of arguments
- * @buffer: Buffer array to handle print
+ * @buff: Buffer array to handle print
  * @flags:  Calculates active flags
  * @width: get width
  * @precision: Precision specification
  * @size: Size specifier
+ * @args: Arguments
  * Return: Number of chars printed.
  */
 int for_pointer(va_list args, char buff[],
 	int flags, int width, int precision, int size)
 {
 	char Qir = 0, padd = ' ';
-	int index = BUFF_SIZE - 2, length = 2, padd_start = 1; /* length=2, for '0x' */
+	int index = BUFF_SIZE - 2, length = 2, padd_start = 1;
 	unsigned long rest_d;
 	char contain_er[] = "0123456789abcdef";
 	void *addrs = va_arg(args, void *);
@@ -97,13 +99,15 @@ int for_pointer(va_list args, char buff[],
  * for_hex - Prints a hexadecimal number in lower or upper
  * @types: Lista of arguments
  * @map_to: Array of values to map the number to
- * @buffer: Buffer array to handle print
+ * @buff: Buffer array to handle print
  * @flags:  Calculates active flags
  * @flag_ch: Calculates active flags
  * @width: get width
  * @precision: Precision specification
  * @size: Size specifier
  * @size: Size specification
+ * @args: Arguments
+ * @contain_er: Container
  * Return: Number of chars printed
  */
 int for_hex(va_list args, char contain_er[], char buff[],
@@ -113,8 +117,8 @@ int for_hex(va_list args, char contain_er[], char buff[],
 	unsigned long int number;
 	unsigned long int all_num;
 
-    number = va_arg(args, unsigned long int);
-    all_num = number;
+	number = va_arg(args, unsigned long int);
+	all_num = number;
 	UNUSED(width);
 
 	number = turn_unsgnd(number, size);
@@ -144,18 +148,19 @@ int for_hex(va_list args, char contain_er[], char buff[],
 /**
  * for_nonprintable - Prints ascii codes in hexa of non printable chars
  * @types: Lista of arguments
- * @buffer: Buffer array to handle print
+ * @buff: Buffer array to handle print
  * @flags:  Calculates active flags
  * @width: get width
  * @precision: Precision specification
  * @size: Size specifier
+ * @args: Arguments
  * Return: Number of chars printed
  */
 int for_nonprintable(va_list args, char buff[],
 	int flags, int width, int precision, int size)
 {
 	int course = 0;
-    int i = 0;
+	int i = 0;
 	char *str = va_arg(args, char *);
 
 	UNUSED(flags);
