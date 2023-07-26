@@ -37,12 +37,12 @@ int for_flags(const char *format, int *i)
 
 /**
  * for_rot13str - Print a string in rot13.
- * @types: Lista of arguments
- * @buffer: Buffer array to handle print
+ * @buff: Buffer array to handle print
  * @flags:  Calculates active flags
  * @width: get width
  * @precision: Precision specification
  * @size: Size specifier
+ * @args: Arguments
  * Return: Numbers of chars printed
  */
 int for_rot13str(va_list args, char buff[],
@@ -90,7 +90,7 @@ int for_rot13str(va_list args, char buff[],
  * for_precision - Calculates the precision for printing
  * @format: Formatted string in which to print the arguments
  * @i: List of arguments to be printed.
- * @list: list of arguments.
+ * @args: Arguments
  *
  * Return: Precision.
  */
